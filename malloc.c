@@ -51,6 +51,7 @@ void *malloc(size_t size)
 {
 	int region_type;
 	t_block *block_info;
+	t_block *tmp;
 	int has_space;
 
 
@@ -63,15 +64,21 @@ void *malloc(size_t size)
 	if (has_space == 0)
 	{
 		block_info = allocate_region(region_type, size);
-		ft_putstr("doesnt have space \n");
 		block_info->region_start = (int)block_info;
 		if (block_info == (void*) -1)
 			return (NULL);
-		block_list[region_type] = block_info;
+		if (!block[region_type])
+			block_list[region_type] = block_info;
+		else
+		{
+			tmp = block_list[region_type]
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = block_info;
+		}
 	}
 	else if (has_space == 1){
 		block_info = block_list[region_type];
-		//ft_putstr("has space\n");
 		while (block_info->next){
 			block_info = block_info->next;
 		}

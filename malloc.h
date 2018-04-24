@@ -4,6 +4,7 @@
 #include "libft/includes/libft.h"
 #include <sys/mman.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #define TINY_MAX_SIZE 992
 #define SMALL_MAX_SIZE 127000
@@ -17,7 +18,15 @@ typedef struct s_block{
 	int region_start;
 } t_block;
 
-t_block *block_list[3];
+typedef struct s_region{
+	struct s_region *next;
+	size_t size;
+	t_block *blocks;
+	long int used;
+	int type;
+}
+
+t_region *block_list[3];
 
 void *malloc(size_t size);
 void show_alloc_mem(void);
