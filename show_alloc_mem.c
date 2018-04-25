@@ -59,28 +59,32 @@ size_t print_blocks(t_block *block)
 void show_alloc_mem(void)
 {
 	size_t total_size;
+	t_region *region;
 
 	total_size = 0;
-	if (block_list[0] != NULL)
+	region = regions[0];
+	while (region)
 	{
 		ft_putstr("TINY : ");
-		ft_putnbr((int)block_list[0]);
+		ft_putnbr((int)region);
 		ft_putstr("\n");
-		total_size += print_blocks(block_list[0]);
+		total_size += print_blocks(region->blocks);
 	}
-	if (block_list[1] != NULL)
+	region = regions[1];
+	while (region)
 	{
 		ft_putstr("SMALL : ");
-		ft_puthex((int)block_list[1]);
+		ft_puthex((int)region);
 		ft_putstr("\n");
-		total_size += print_blocks(block_list[1]);
+		total_size += print_blocks(region->blocks);
 	}
-	if (block_list[2] != NULL)
+	region = regions[2];
+	while (region)
 	{
 		ft_putstr("LARGE : ");
-		ft_puthex((int)block_list[2]);
+		ft_puthex((int)region);
 		ft_putstr("\n");
-		total_size += print_blocks(block_list[2]);
+		total_size += print_blocks(region->blocks);
 	}
 	ft_putstr("Total: ");
 	ft_putnbr(total_size);

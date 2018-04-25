@@ -15,7 +15,7 @@ typedef struct s_block{
 	struct s_block *next;
 	size_t size;
 	int free;
-	int region_start;
+	t_region *region;
 } t_block;
 
 typedef struct s_region{
@@ -23,10 +23,9 @@ typedef struct s_region{
 	size_t size;
 	t_block *blocks;
 	long int used;
-	int type;
-}
+} t_region;
 
-t_region *block_list[3];
+t_region *regions[3];
 
 void *malloc(size_t size);
 void show_alloc_mem(void);
