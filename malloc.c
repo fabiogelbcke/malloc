@@ -1,6 +1,6 @@
 #include "malloc.h"
 
-t_region *region_list[3] = {NULL, NULL, NULL};
+t_region *regions[3] = {NULL, NULL, NULL};
 
 size_t get_region_size(int region_type, size_t size)
 {
@@ -31,6 +31,8 @@ t_region *allocate_region(int region_type, size_t size)
 	region->size = region_size;
 	region->blocks = (t_block*)(region + 1);
 	region->next = NULL;
+	region->prev = NULL;
+	region->region_type = region_type;
 	region->used = 0;
 	return region;
 }
@@ -61,7 +63,7 @@ void *malloc(size_t size)
 {
 	int region_type;
 	t_block *block;
-	t_block *tmp;
+	t_region *tmp;
 	t_region *region;
 
 
@@ -77,25 +79,30 @@ void *malloc(size_t size)
 		if (region == (void*) -1)
 			return (NULL);
 		block = region->blocks;
-		block->region = (unsigned int)region;
-		if (!region[region_type])
-			region[region_type] = region;
+		block->region = region;
+		block->prev = NULL;
+		if (!regions[region_type])
+			regions[region_type] = region;
 		else
 		{
-			tmp = region_list[region_type]
+			tmp = regions[region_type];
 			while (tmp->next)
 				tmp = tmp->next;
 			tmp->next = region;
+			region->prev = tmp;
 		}
 	}
 	else if (!block->next){
 		block->next = (void*)block + block->size + sizeof(t_block);
 		block->next->region = block->region;
+		block->next->prev = block;
 		block = block->next;
 	}
 	block->size = size;
 	block->free = 0;
 	block->next = NULL;
 	block->region->used += size;
+	block->check = (unsigned int)block % (block->region->size);
+;
 	return (void*)(block + 1);
 }

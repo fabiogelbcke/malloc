@@ -69,6 +69,7 @@ void show_alloc_mem(void)
 		ft_putnbr((int)region);
 		ft_putstr("\n");
 		total_size += print_blocks(region->blocks);
+		region = region->next;
 	}
 	region = regions[1];
 	while (region)
@@ -77,6 +78,7 @@ void show_alloc_mem(void)
 		ft_puthex((int)region);
 		ft_putstr("\n");
 		total_size += print_blocks(region->blocks);
+		region = region->next;
 	}
 	region = regions[2];
 	while (region)
@@ -85,6 +87,7 @@ void show_alloc_mem(void)
 		ft_puthex((int)region);
 		ft_putstr("\n");
 		total_size += print_blocks(region->blocks);
+		region = region->next;
 	}
 	ft_putstr("Total: ");
 	ft_putnbr(total_size);
